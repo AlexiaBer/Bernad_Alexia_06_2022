@@ -14,6 +14,7 @@ const normalizePort = val => { // fonction qui renvoie un port valide, qu'il soi
 const port = normalizePort(process.env.PORT || '3000')
 app.set('port', port); // on dit à l'application sur quel port elle va tourner
 
+
 const errorHandler = error => { // fonction qui recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur
   if (error.syscall !== 'listen') {
     throw error;
@@ -37,7 +38,7 @@ const errorHandler = error => { // fonction qui recherche les différentes erreu
 const server = http.createServer(app);   // méthode createServer du package http. argument de createServer = la fonction qui sera appelée à chaque requête reçue par le serveur.
 //on appelle l'app qui sera la fonction exécutée (recevra la requete et la réponse et les modifiera)
 
-server.on('error', errorHandler);
+//server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;

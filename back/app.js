@@ -1,14 +1,6 @@
 const express = require('express'); // pour importer Express
-const helmet = require('helmet');
-const mongoose = require('mongoose');
-
-const userRoutes = require('./routes/user');
-const { nextTick } = require('process');
 
 const app = express(); //sera notre application Express, appelle la méthode express
-app.use(express.json());
-
-app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
 
 app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse, pour éviter les ERREURS CORS
   res.setHeader('Access-Control-Allow-Origin', '*'); // toutes les origines ont le droit d'accéder à notre API
@@ -17,13 +9,24 @@ app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse,
   next();
 });
 
+app.use(express.json());
+const helmet = require('helmet');
+const mongoose = require('mongoose');
+
+const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
+
+app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
+
 mongoose.connect('mongodb+srv://Test:test@cluster0.6dscriu.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-app.use(express.json());
 
 app.use('/api/', userRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
+
 module.exports = app; //exporte la constante (l'application) pour pouvoir y accéder depuis les autres fichiers du projet
