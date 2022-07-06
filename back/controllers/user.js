@@ -1,94 +1,36 @@
-// copié collé du P5, à ajuster au P6 !
-
-const uuid = require('uuid/v1');
 const User = require('../models/User');
 
-exports.getAllUsers = (req, res, next) => {
-  User.find().then(
-    (user) => {
-      const mappedProducts = products.map((product) => {
-        product.imageUrl = req.protocol + '://' + req.get('host') + '/images/' + product.imageUrl;
-        return product;
-      });
-      res.status(200).json(mappedProducts);
-    }
-  ).catch(
-    () => {
-      res.status(500).send(new Error('Database error!'));
-    }
-  );
+const app = require('../app');
+const bodyParser = require('body-parser');
+
+exports.createUser = (req, res, next) => {
+  const user = new User({ // on crée une nouvelle instance de notre modèle "user" auquel on passe un objet contenant toutes les infos
+    //...req.body
+    email: "test@test.com",
+    password: "truc"
+  });
+  console.log(user);
+  user.save() // permet d'enregistrer l'objet dans la BDD, puis retourne un promise
+  .then(()=> 
+  { 
+    console.log("user");
+    res.status(201).json({ message: "Utilisateur enregistré !" }) }) 
+  // il faut renvoyer une réponse au front, sinon expiration de la requête. Code 201 : bonne création de la ressource
+  .catch(error => res.status(400).json({ error }));
+ // next();
 };
 
-exports.getOneProduct = (req, res, next) => {
-  Product.findById(req.params.id).then(
-    (product) => {
-      if (!product) {
-        return res.status(404).send(new Error('Product not found!'));
-      }
-      product.imageUrl = req.protocol + '://' + req.get('host') + '/images/' + product.imageUrl;
-      res.status(200).json(product);
-    }
-  ).catch(
-    () => {
-      res.status(500).send(new Error('Database error!'));
-    }
-  )
-};
+exports.userConnexion = (req, res, next) => {
+  console.log(req.body.email)
+  User.findOne({ email: req.body.email})
+  .then(()=> res.status(200).json({ userId: "req.params._id, token: "}))
+  .catch(error => {
+    console.log("error")
+    console.log(error)
+    return res.json({ error })
+  });
 
-/**
- *
- * Expects request to contain:
- * contact: {
- *   firstName: string,
- *   lastName: string,
- *   address: string,
- *   city: string,
- *   email: string
- * }
- * products: [string] <-- array of product _id
- *
- */
-exports.orderProducts = (req, res, next) => {
-  if (!req.body.contact ||
-      !req.body.contact.firstName ||
-      !req.body.contact.lastName ||
-      !req.body.contact.address ||
-      !req.body.contact.city ||
-      !req.body.contact.email ||
-      !req.body.products) {
-    return res.status(400).send(new Error('Bad request!'));
-  }
-  let queries = [];
-  for (let productId of req.body.products) {
-    const queryPromise = new Promise((resolve, reject) => {
-      Product.findById(productId).then(
-        (product) => {
-          if (!product) {
-            reject('Product not found: ' + productId);
-          }
-          product.imageUrl = req.protocol + '://' + req.get('host') + '/images/' + product.imageUrl;
-          resolve(product);
-        }
-      ).catch(
-        () => {
-          reject('Database error!');
-        }
-      )
-    });
-    queries.push(queryPromise);
-  }
-  Promise.all(queries).then(
-    (products) => {
-      const orderId = uuid();
-      return res.status(201).json({
-        contact: req.body.contact,
-        products: products,
-        orderId: orderId
-      })
-    }
-  ).catch(
-    (error) => {
-      return res.status(500).json(new Error(error));
-    }
-  );
+
+
+  next()
 };
