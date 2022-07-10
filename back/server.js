@@ -38,7 +38,7 @@ const errorHandler = error => { // fonction qui recherche les différentes erreu
 const server = http.createServer(app);   // méthode createServer du package http. argument de createServer = la fonction qui sera appelée à chaque requête reçue par le serveur.
 //on appelle l'app qui sera la fonction exécutée (recevra la requete et la réponse et les modifiera)
 
-//server.on('error', errorHandler);
+server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;

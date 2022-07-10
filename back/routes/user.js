@@ -4,7 +4,7 @@ const router = express.Router(); // on crée un router via express (méthode .Ro
 
 const userCtrl = require('../controllers/user');
 
-router.post('/auth/signup', userCtrl.createUser);
-router.post('/auth/login', userCtrl.userConnexion);
+router.post('/signup', userCtrl.createUser);
+router.post('/login', userCtrl.userConnexion);
 
 module.exports = router;

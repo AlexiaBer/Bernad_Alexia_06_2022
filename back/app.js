@@ -1,6 +1,12 @@
 const express = require('express'); // pour importer Express
+const mongoose = require('mongoose');
+const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
+const helmet = require('helmet');
 
 const app = express(); //sera notre application Express, appelle la méthode express
+
+app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
 
 app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse, pour éviter les ERREURS CORS
   res.setHeader('Access-Control-Allow-Origin', '*'); // toutes les origines ont le droit d'accéder à notre API
@@ -10,13 +16,6 @@ app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse,
 });
 
 app.use(express.json());
-const helmet = require('helmet');
-const mongoose = require('mongoose');
-
-const userRoutes = require('./routes/user');
-const sauceRoutes = require('./routes/sauce');
-
-app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
 
 mongoose.connect('mongodb+srv://Test:test@cluster0.6dscriu.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -24,8 +23,6 @@ mongoose.connect('mongodb+srv://Test:test@cluster0.6dscriu.mongodb.net/?retryWri
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
-app.use('/api/', userRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
 
