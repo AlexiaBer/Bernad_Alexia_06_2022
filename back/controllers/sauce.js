@@ -1,7 +1,9 @@
 const Sauce = require('../models/Sauce');
 
+const app = require('../app');
+
 exports.saucesList = (req, res, next) => {
-  Sauce.find() // on utilise la méthode findOne dans le modèle user pour trouver l'user unique ayant le même _id que le paramètre de la requête
+  Sauce.find() // find nous retourne la liste complète dans une promise
   .then(sauces => res.status(200).json(sauces)) // user est retourné dans une promise et envoyé au front end
   .catch(error => res.status(400).json({ error }));
 };
@@ -13,12 +15,12 @@ exports.findOneSauce = (req, res, next) => { // :id est dynamique, on rend 'id' 
 };
   
 exports.createSauce = (req, res, next) => {
-  //  delete req.body._id;
-    const sauce = new Sauce ({
+    delete req.body._id;
+    const sauce = new Sauce({
       ...req.body
-    })    
+    });    
     sauce.save()
-    .then(() => res.status(201).json({ message: "Sauce crée !" }))
+    .then(() => res.status(201).json({ message: "Sauce créée !" }))
     .catch (error => res.status(400).json({ error })); 
 };
  
