@@ -2,11 +2,12 @@ const express = require('express'); // pour importer Express
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
-const helmet = require('helmet');
+//const helmet = require('helmet');
 
 const app = express(); //sera notre application Express, appelle la méthode express
 
-app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
+//app.use(helmet({crossOriginResourcePolicy:{policy:'same-site'}}));
+app.use(express.json());
 
 app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse, pour éviter les ERREURS CORS
   res.setHeader('Access-Control-Allow-Origin', '*'); // toutes les origines ont le droit d'accéder à notre API
@@ -15,7 +16,7 @@ app.use((req, res, next) => { // On va ajouter des headers sur l'objet réponse,
   next();
 });
 
-app.use(express.json());
+
 
 mongoose.connect('mongodb+srv://Test:test@cluster0.6dscriu.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
