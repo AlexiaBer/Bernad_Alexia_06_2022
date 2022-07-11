@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 exports.saucesList = (req, res, next) => {
   console.log("recup sauces")
   Sauce.find() // find nous retourne la liste complète dans une promise
-  .then(sauces => res.status(200).json(sauces)) // user est retourné dans une promise et envoyé au front end
+  .then(sauces => res.status(200).json([sauces])) // les sauces sont retournées dans une promise et envoyé au front end
   .catch(error => res.status(400).json({ error }));
 };
   

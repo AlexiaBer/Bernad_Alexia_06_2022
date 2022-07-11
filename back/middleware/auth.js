@@ -10,6 +10,7 @@ module.exports = (req, res, next) => {
         req.auth = {        // on ajoute à l'objet request le userId dans un objet auth qu'on crée.
             userId: userId
         };
+        console.log(decodedToken.userId)
     } catch(error) {
         res.status(401).json({ error });
     }
