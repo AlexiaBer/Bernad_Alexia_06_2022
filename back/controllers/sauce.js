@@ -27,7 +27,7 @@ exports.createSauce = (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });    
     sauce.save()
-    .then(() => res.status(201).json({ message: "Sauce créée !" }))
+    .then(() => res.status(201).json({ message: "Sauce créée" }))
     .catch (error => res.status(400).json({ error })); 
 };
 
@@ -51,7 +51,6 @@ exports.modifySauce = (req, res, next) => {
       res.status(400).json({ error });
     })
 }
-
 
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({_id: req.params.id})

@@ -31,16 +31,15 @@ exports.userConnexion = (req, res, next) => { // vérifier si l'user existe dans
         if (!valid) { // le mdp transmis n'est pas correct
           res.status(401).json({message: "Paire identifiant/mot de passe incorrecte"})
           } else { // le mdp est correct, la fonction retourne l'userId et le token
-            
+
             res.status(200).json({
               userId: user._id,
               token: jwt.sign( // fonction sign de jsonwebtoken : pour chiffrer un nouveau token
-                { userId: user._id}, // les données qu'on veut encoder à l'intérieur de ce token, le payload. Pour être sûr que cette requete corresp bien à ce userId
+                { userId: user._id }, // les données qu'on veut encoder à l'intérieur de ce token, le payload. Pour être sûr que cette requete corresp bien à ce userId
                 'test782voilacommecaonverra903', //la clé secrète pour l'encodage (utiliser en temps normal une chaine de caract bcp plus longue et très aléatoire)
-                { expiresIn: '24h'} //on applique une expiration pour le token. Après 24h il n'est plus valable, l'user devra se reconnecter au bout de 24h
+                { expiresIn: '24h' } //on applique une expiration pour le token. Après 24h il n'est plus valable, l'user devra se reconnecter au bout de 24h
               )
-            }
-            )
+            });
           }
         })
       .catch(error => {
@@ -48,7 +47,5 @@ exports.userConnexion = (req, res, next) => { // vérifier si l'user existe dans
       })
     }
   })
-  .catch(error => {
-   res.status(500).json({ error });
-  })
+  .catch(error => { res.status(500).json({ error })})
 }
