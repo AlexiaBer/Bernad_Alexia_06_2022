@@ -10,7 +10,8 @@ module.exports = (req, res, next) => {
         req.auth = {        // on ajoute à l'objet request le userId dans un objet auth qu'on crée.
             userId: userId
         };
-        res.status(200).json({ message : "Authentified user"})
+        next();
+//        res.status(200).json({ message : "Authentified user"})
     } catch(error) {
         res.status(401).json({ error });
     }

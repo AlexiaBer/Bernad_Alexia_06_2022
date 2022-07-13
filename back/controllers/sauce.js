@@ -7,7 +7,11 @@ const auth = require('../middleware/auth');
 exports.saucesList = (req, res, next) => {
   console.log("recup sauces")
   Sauce.find() // find nous retourne la liste complète dans une promise
-  .then(sauces => res.status(200).json([sauces])) // les sauces sont retournées dans une promise et envoyé au front end
+  .then(sauces => {
+    console.log(sauces);
+    res.status(200).json(sauces)
+  }
+    ) // les sauces sont retournées dans une promise et envoyé au front end
   .catch(error => res.status(400).json({ error }));
 };
   
@@ -24,10 +28,10 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
       ...sauceObject,
       userId: req.auth.userId,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });    
     sauce.save()
-    .then(() => res.status(201).json({ message: "Sauce créée" }))
+    .then(() => res.status(201).json({ message: "Sauce créée", sauce: sauce}))
     .catch (error => res.status(400).json({ error })); 
 };
 
