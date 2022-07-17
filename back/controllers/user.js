@@ -8,8 +8,8 @@ const app = require('../app');
 const bodyParser = require('body-parser');
 
 exports.createUser = (req, res, next) => {
-    const cryptedEmail = cryptoJs.HmacSHA256(req.body.email, "?cle1de2securite3!").toString();
-    bcrypt.hash(req.body.password, 10)
+    const cryptedEmail = cryptoJs.HmacSHA256(req.body.email, "?cle1de2securite3!").toString(); // je crypte l'e-mail de l'utilisateur dans la BDD
+    bcrypt.hash(req.body.password, 10) // je crypte son mdp également dans la BDD
     .then(hash => {
       const user = new User({
         email: cryptedEmail,
@@ -26,9 +26,9 @@ exports.userConnexion = (req, res, next) => { // vérifier si l'user existe dans
   const cryptedEmail = cryptoJs.HmacSHA256(req.body.email, "?cle1de2securite3!").toString();
   User.findOne({ email: cryptedEmail })
   .then(user => {
-    if (user === null) { // l'user n'existe pas dans la BDD
+    if (user == null) { // l'user n'existe pas dans la BDD
       res.status(401).json({ message : "Paire identifiant/mot de passe incorrecte" });
-    } else if (user) {
+    } else {
       console.log(cryptedEmail)
       bcrypt.compare(req.body.password, user.password) //on compare les 2 mdp : req.body.password : celui qui est écrit par le client, user.password : celui de la bdd
       .then(valid => {
