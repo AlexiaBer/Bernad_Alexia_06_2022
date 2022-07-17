@@ -2,7 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => { 
+module.exports = (req, res, next) => { // pour authentifier l'utilisateur via son token.
     try { //on récupère le token
         const token = req.headers.authorization.split(' ')[1]; // on récupère le header, on le split (divise la chaine de caract dans un tableau autour de l'espace qui se trouve entre mot-clé "bearer" et le token. On on veut récupérer le token en position [1])
         const decodedToken = jwt.verify(token, 'test782voilacommecaonverra903'); //on va décoder le token avec méthode verify de jwt
@@ -11,7 +11,6 @@ module.exports = (req, res, next) => {
             userId: userId
         };
         next();
-//        res.status(200).json({ message : "Authentified user"})
     } catch(error) {
         res.status(401).json({ error });
     }
