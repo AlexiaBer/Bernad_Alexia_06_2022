@@ -1,6 +1,6 @@
-const http = require("http"); // accéder à l'objet http pour créer un serveur
-const app = require('./app'); // pour importer le fichier app.js
-const normalizePort = val => { // fonction qui renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
+const http = require("http"); 
+const app = require('./app'); 
+const normalizePort = val => { 
   const port = parseInt(val,10);
   if (isNaN(port)) {
     return val;
@@ -12,10 +12,9 @@ const normalizePort = val => { // fonction qui renvoie un port valide, qu'il soi
 }; 
 
 const port = normalizePort(process.env.PORT || '3000')
-app.set('port', port); // on dit à l'application sur quel port elle va tourner
+app.set('port', port); 
 
-
-const errorHandler = error => { // fonction qui recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur
+const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -35,8 +34,7 @@ const errorHandler = error => { // fonction qui recherche les différentes erreu
   }
 };
 
-const server = http.createServer(app);   // méthode createServer du package http. argument de createServer = la fonction qui sera appelée à chaque requête reçue par le serveur.
-//on appelle l'app qui sera la fonction exécutée (recevra la requete et la réponse et les modifiera)
+const server = http.createServer(app);   
 
 server.on('error', errorHandler);
 server.on('listening', () => {
@@ -45,5 +43,4 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port); // un écouteur d'évènements est enregistré, consignant le port ou le canal nommé sur lequel le serveur s'exécute dans la console.
-console.log(server.address());
+server.listen(port); 
